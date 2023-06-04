@@ -33,4 +33,4 @@ jobs:
           user-email: ${{ secrets.USER_EMAIL }}
           # It defaults to `main`
           target-branch: "main"
-          target-directory: projects
+          target-directory: packages/src/projects
