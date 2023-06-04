@@ -1,0 +1,36 @@
+name: Deploy Projects to Frontend Repository
+run-name: ${{ github.actor }} is releasing the project to production
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  clone-to-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Config git
+        run: |
+          git config --unset-all http.https://github.com/.extraheader
+
+      - name: Remove .git
+        run: rm -rf .git
+
+      - name: Deploy to external repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.EXTERNAL_REPOSITORY_PERSONAL_ACCESS_TOKEN }}
+
+        with:
+          # GitHub Action output files
+          source-directory: projects/
+          destination-github-username: ${{ secrets.USER_DESTINATION_USERNAME }}
+          destination-repository-name: ${{ secrets.DESTINATION_REPOSITORY_NAME }}
+          user-email: ${{ secrets.USER_EMAIL }}
+          # It defaults to `main`
+          target-branch: "main"
+          target-directory: packages/src/projects
