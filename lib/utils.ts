@@ -6,7 +6,7 @@ import parser from 'dir-parser'
  *
  * @params path - A given path
  */
-export const directoryToMetadata = async (path: string) => {
+export const directoryParser = async (path: string) => {
   const directoryParser = await parser(path, {
     excludes: ['.git', 'node_modules', 'public', 'app'],
     getFiles: true,
@@ -19,4 +19,4 @@ export const directoryToMetadata = async (path: string) => {
   console.log(fn.pretty(directoryParser.children))
 }
 
-directoryToMetadata('projects')
+directoryParser('projects')
