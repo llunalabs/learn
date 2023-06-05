@@ -32,5 +32,5 @@ jobs:
           destination-repository-name: ${{ secrets.DESTINATION_REPOSITORY_NAME }}
           user-email: ${{ secrets.USER_EMAIL }}
           # It defaults to `main`
-          target-branch: "main"
+          target-branch: 'main'
           target-directory: packages/src/projects

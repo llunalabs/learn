@@ -1,0 +1,23 @@
+{
+  "name": "learn",
+  "version": "1.0.0",
+  "description": "A home for our educational content for http://learn.llunalabs.com/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://taaiigaa@github.com/llunalabs/learn.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/llunalabs/learn/issues"
+  },
+  "homepage": "https://github.com/llunalabs/learn#readme",
+  "dependencies": {
+    "dir-parser": "^2.1.8"
+  }
+}
