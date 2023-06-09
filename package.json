@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/llunalabs/learn#readme",
   "dependencies": {
-    "dir-parser": "^2.1.8"
+    "dir-parser": "^2.1.8",
+    "rambda": "^7.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.5"
   }
 }
