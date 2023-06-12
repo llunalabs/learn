@@ -15,11 +15,12 @@ export const directoryParser = async (path: string) => {
     getFiles: true,
     getChildren: true,
     dirTree: false,
+    dirInfo: false,
     ignores: [],
     includes: [],
   })
 
-  return fn.pretty(directoryParser.children)
+  return directoryParser.children
 }
 
 /**
@@ -41,8 +42,8 @@ export const writeJson = (fileName: string, filePath: string, data: RootProjectM
 export const createMetaDataFile = async () => {
   const PROJECTS_DIRECTORY_PATH = './projects'
 
-  const [directoryTree] = await directoryParser(PROJECTS_DIRECTORY_PATH)
-  console.log(directoryTree)
+  const data = await directoryParser(PROJECTS_DIRECTORY_PATH)
+  writeJson('metadata', PROJECTS_DIRECTORY_PATH, data)
 }
 
 createMetaDataFile()
