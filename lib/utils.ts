@@ -39,6 +39,9 @@ export const writeJson = (fileName: string, filePath: string, data: RootProjectM
   })
 }
 
+/**
+ * Generate a metadata file to the projects directory
+ */
 export const createMetaDataFile = async () => {
   const PROJECTS_DIRECTORY_PATH = './projects'
 
