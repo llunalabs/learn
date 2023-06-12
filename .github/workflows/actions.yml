@@ -9,6 +9,9 @@ on:
 jobs:
   clone-to-site:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [14, 16, 18]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -19,6 +22,14 @@ jobs:
 
       - name: Remove .git
         run: rm -rf .git
+
+      - name: Creating metadata file to projects folder
+        steps:
+          - uses: actions/setup-node@v3
+            with:
+              node-version: 16
+          - run: npm install
+          - run: npm run compile
 
       - name: Deploy to external repository
         uses: cpina/github-action-push-to-another-repository@main
@@ -32,5 +43,5 @@ jobs:
           destination-repository-name: ${{ secrets.DESTINATION_REPOSITORY_NAME }}
           user-email: ${{ secrets.USER_EMAIL }}
           # It defaults to `main`
-          target-branch: "main"
+          target-branch: 'main'
           target-directory: packages/src/projects
