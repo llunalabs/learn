@@ -24,12 +24,11 @@ jobs:
         run: rm -rf .git
 
       - name: Creating metadata file to projects folder
-        steps:
-          - uses: actions/setup-node@v3
-            with:
-              node-version: 16
-          - run: npm install
-          - run: npm run compile
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm install
+      - run: npm run compile
 
       - name: Deploy to external repository
         uses: cpina/github-action-push-to-another-repository@main
