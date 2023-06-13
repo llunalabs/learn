@@ -1,5 +1,4 @@
 import fs from 'fs'
-import fn from 'funclib'
 import parser from 'dir-parser'
 
 export interface RootProjectMetadata {}
