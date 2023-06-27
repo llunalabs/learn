@@ -1,5 +1,4 @@
 import fs from 'fs'
-import fn from 'funclib'
 import parser from 'dir-parser'
 
 export interface RootProjectMetadata {}
@@ -39,9 +38,11 @@ export const writeJson = (fileName: string, filePath: string, data: RootProjectM
   })
 }
 
+/**
+ * Generate a metadata file to the projects directory
+ */
 export const createMetaDataFile = async () => {
   const PROJECTS_DIRECTORY_PATH = './projects'
-
   const data = await directoryParser(PROJECTS_DIRECTORY_PATH)
   writeJson('metadata', PROJECTS_DIRECTORY_PATH, data)
 }

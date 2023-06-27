@@ -2,7 +2,7 @@
   "name": "learn",
   "version": "1.0.0",
   "description": "A home for our educational content for http://learn.llunalabs.com/",
-  "main": "index.js",
+  "main": "lib/utils.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "ts-node lib/utils.ts"
@@ -23,6 +23,8 @@
     "rambda": "^7.5.0"
   },
   "devDependencies": {
-    "@types/node": "^20.2.5"
+    "@types/node": "^20.2.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3"
   }
 }
