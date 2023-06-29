@@ -1,1 +1,62 @@
 # Introduction to LlamaIndex
+
+LlamaIndex, also known as GPT Index, is a data framework to help you to easily build Large Language Models (LLM) applications. It comes with a set of tools to streamline the process:
+
+- **Data Connectors**: Easily ingest data from a variety of sources and formats, including APIs, PDFs, documents, and SQL databases.
+
+- **Data Structuring**: Efficiently organize and structure your data using indices and graphs, ensuring seamless compatibility with LLMs.
+
+- **Advanced Retrieval and Querying**: Utilize LlamaIndex's advanced interface to retrieve and query data with precision. Input any LLM prompt and receive contextually relevant information and knowledge-augmented outputs.
+
+- **Seamless Integration**: LlamaIndex seamlessly integrates with external application frameworks like LangChain, Flask, Docker, ChatGPT, and more, making it highly versatile.
+
+LlamaIndex accommodates users of all proficiency levels, providing tailored solutions for both beginners and experts. You can easily get started with LlamaIndex without having much programming knowledge.
+
+## Download your document
+
+Now that you know what LlamaIndex does, lets get started by installing it. Ensure that your VS Code is open and that your virtual environment is activated, we can start by typing `pip install llama_index` in your terminal.
+
+Great! Now that we've installed `llama_index`, let's install the data that we want to train our ChatGPT with. You can download any documents you want but for the purpose of this course, let's use the union text document.
+
+Start by typing `curl -O https://raw.githubusercontent.com/hwchase17/chat-your-data/master/state_of_the_union.txt` in your terminal. This will fetch the file and save it locally in our folder. Once that's done, you should see it appear in your project folder. Like this
+
+<img src="https://i.imgur.com/FY7TR9n.png" />
+
+## 🏋 Training ChatGPT with your documents
+
+Here comes the main part. We will be using LlamaIndex to train our ChatGPT using the union data we just downloaded. Don't worry if you don't understand any of this at the moment. We will explain it to you in the later part of this course.
+
+Create a new file named `main.py` and paste the code below.
+
+```python
+import openai
+from llama_index import VectorStoreIndex, SimpleDirectoryReader
+
+openai.api_key = "YOUR API KEY"
+documents = SimpleDirectoryReader('data').load_data()
+index = VectorStoreIndex.from_documents(documents)
+```
+
+As you can see, we're currently using `SimpleDirectoryReader` to read the data from the file that we've just downloaded. What this does is that it can read files into a separate documents or concatenate files into one document text and feed it into ChatGPT to train. You can find out more from [here](https://gpt-index.readthedocs.io/en/latest/reference/readers.html#llama_index.readers.SimpleDirectoryReader).
+
+`VectorStoreIndex.from_documents` creates an index from the reader and stores it in a vector so that it can be used by ChatGPT to provide a respond that's relevant to what it's trained for.
+
+## Make your query
+
+Awesome! Now that you already understand how to train ChatGPT with your own data. You can now start to send a query to ChatGPT and see the response. Here's how to do it:
+
+Paste this code directly below `VectorStoreIndex.from_documents(documents)`. Once you've done that, open up your terminal and type `python3 main.py`. This will execute your python script and train ChatGPT with your own document before running your queries.
+
+```python
+query_engine = index.as_query_engine()
+response = query_engine.query("What is NATO?")
+print(response)
+```
+
+Now you should see a response from ChatGPT and hopefully it should respond with something that's more relevant to what you trained. Here's how mine looked like:
+
+```
+NATO is the North Atlantic Treaty Organization, an intergovernmental military alliance between 29 North American and European countries. It was created to secure peace and stability in Europe after World War 2.
+```
+
+This is so cool isn't it? Now let's move on to the next section where we explained to you some of the fundamentals.
