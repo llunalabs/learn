@@ -1,0 +1,20 @@
+# ⛓️ Data connectors
+
+We've finally reach the last section of the course. In this section, we'll teach you how to create different loaders, combine the data, and store it into a vector before querying it.
+
+But before we continue, let's go through what a data connector is. A data connector, as the name suggests, takes data from multiple sources and converts it into a document format which can be ingested by LlamaIndex. If you're interested to find out more, feel free to read the document [here](https://gpt-index.readthedocs.io/en/latest/reference/readers.html)
+
+## Loading Youtube Video
+
+Let's see how we can convert the transcripts from youtube videos into documents format
+
+```python
+from llama_index import download_loader
+
+YoutubeTranscriptReader = download_loader("YoutubeTranscriptReader")
+
+loader = YoutubeTranscriptReader()
+youtube_documents = loader.load_data(ytlinks=['https://www.youtube.com/watch?v=nHcbHdgVUJg&ab_channel=WintWealth'])
+```
+
+Make sure you run `pip install llama_hub youtube_transcript_api` before running this script.

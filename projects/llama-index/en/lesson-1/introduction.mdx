@@ -33,7 +33,7 @@ import openai
 from llama_index import VectorStoreIndex, SimpleDirectoryReader
 
 openai.api_key = "YOUR API KEY"
-documents = SimpleDirectoryReader('data').load_data()
+documents = SimpleDirectoryReader('./state_of_the_union.txt').load_data()
 index = VectorStoreIndex.from_documents(documents)
 ```
 

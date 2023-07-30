@@ -2,8 +2,124 @@
 
 In this lesson we will be discussing the fundamentals of LlamaIndex and it's core components.
 
-## Nodes
+## Fundamentals
 
-Node is the fundamental unit of LlamaIndex. Node is nothing but a data structure which contains a piece of text.
+### Nodes
 
-Whenever you are provided a document, you can split into multiple chunks and store in nodes
+Let's say we have a source Document that contains an article. In this Document, the Nodes can represent various elements such as text chunks, individual images, and even a Table. Each of these Nodes carries essential information and plays a significant role in the overall structure of the Document. Furthermore, a Node also holds valuable 'relationships', establishing connections to other nodes within the Document, indices for efficient retrieval, and even back to the source documents themselves.
+
+### Document Loader
+
+This is an interface to extract data from a given source. The source can be anything that ranges from a webpage, youtube video, pdf etc. It gives us an easy way to load the given document and turn it into a digestable source for the AI to learn from.
+
+### Indexes
+
+An index is a data structure that organizes and stores information from various data sources, making it easier to search. An index is built over a bunch of nodes which can then be used to provide us with a relevant answer when we query our ChatGPT. You can read [here](https://gpt-index.readthedocs.io/en/latest/reference/indices.html) if you want to understand more about indices.
+
+### Retrievers
+
+A retriever helps to fetch a set of Nodes from an index based on a given query. It's acts like a search tool that finds relevant information from a large dataset which will then be used to provide you with a relevant answer.
+
+There are many types of retrievers such as `Empty Index Retrievers`, `Knowledge Graph Retrievers`, `List Retrievers`, `Keyword Table Retrievers`, `Tree Retrievers`, and `Vector Store Retrievers`. If you are interested to find out about all these, you can find out more [here](https://gpt-index.readthedocs.io/en/latest/reference/query/retrievers.html)
+
+### Query Engines
+
+![alpha](https://images.ctfassets.net/xjan103pcp94/6183JJbkrR46uPSqVz1Y7P/6774e60d3144ecdda6c2da4400983f09/llamaindex-img-8.png 'Credits: anyscale')
+
+A query engine processes user inputs, interacts with the underlying data structures (like indexes), and returns a synthesized response. You can find out more about Query Engines [here](https://gpt-index.readthedocs.io/en/latest/reference/query/query_engines.html)
+
+## ⚒️ Let's build something
+
+Awesome! Now that you have a basic understand, let's continue on with our project.
+
+Now open up your terminal in your `VS Code` by pressing `CTRL + ~` then activate your virtual environment by typing `source venv/bin/activate` and type `pip install langchain`.
+
+We will continue using the union data that we downloaded earlier on. Make sure that your `main.py` is empty. We'll be creating a new project for now.
+
+### Make a new file
+
+Paste this in your `main.py`
+
+```python
+from llama_index import SimpleDirectoryReader
+from llama_index.node_parser import SimpleNodeParser
+
+parser = SimpleNodeParser()
+documents = SimpleDirectoryReader('./state_of_the_union.txt').load_data()
+nodes = parser.get_nodes_from_documents(documents)
+```
+
+Now you might be wondering what we've just pasted. What we just did is that we've loaded our text file and split the data into multiple nodes.
+
+Once that's done, we can use it to create an index so that we can organize those information into a searchable source. We can do so like this
+
+### Create an index
+
+```python
+from llama_index import SimpleDirectoryReader, LLMPredictor, VectorStoreIndex
+from llama_index.node_parser import SimpleNodeParser
+
+parser = SimpleNodeParser()
+documents = SimpleDirectoryReader('./state_of_the_union.txt').load_data()
+nodes = parser.get_nodes_from_documents(documents)
+index = VectorStoreIndex(nodes)
+```
+
+Great! We can proceed to create a retriever. We will be using VectorIndexRetriever to retrieve the top k matching documents based on similarity. For this example we will keep k=2
+
+### Create a retriever
+
+```python
+from llama_index import SimpleDirectoryReader, LLMPredictor, VectorStoreIndex
+from llama_index.node_parser import SimpleNodeParser
+
+# Add this to your code
+from llama_index.retrievers import VectorIndexRetriever
+
+parser = SimpleNodeParser()
+documents = SimpleDirectoryReader('./state_of_the_union.txt').load_data()
+nodes = parser.get_nodes_from_documents(documents)
+index = VectorStoreIndex(nodes)
+
+# Add this to your code
+retriever = VectorIndexRetriever(
+    index=index,
+    similarity_top_k=2,
+)
+```
+
+`similarity_top_k` refers to the `top-k` chunks retrieved from the VectorStore that we just created by how similar it is. The higher the number, the more precise answer it'll generated based on a given query. For example, if you ask "How is the weather today?", it'll try to match your input and give you an answer that's very similar to your question. It's best to not set it too high as this will skew the output and give you an answer that might not make much sense.
+
+## Create a query engine
+
+Now to the final bit. Let's create a query engine like this
+
+```python
+from llama_index import SimpleDirectoryReader, LLMPredictor, VectorStoreIndex
+from llama_index.node_parser import SimpleNodeParser
+from llama_index.retrievers import VectorIndexRetriever
+
+# Add this to your code
+from llama_index.query_engine import RetrieverQueryEngine
+
+parser = SimpleNodeParser()
+documents = SimpleDirectoryReader('./state_of_the_union.txt').load_data()
+nodes = parser.get_nodes_from_documents(documents)
+index = VectorStoreIndex(nodes)
+retriever = VectorIndexRetriever(
+    index=index,
+    similarity_top_k=2,
+)
+
+# Add these to your code
+query_engine = RetrieverQueryEngine(
+    retriever=retriever
+)
+response = query_engine.query("What did the author do growing up?")
+print(response)
+```
+
+Assuming that you follow this without any issues, your output should be something similar to mine like this `The author grew up in a family where they had to adjust to the rising cost of food, gas, housing, and other expenses. They experienced the struggles of their father leaving home to find work.
+`
+
+And that's it, you've successfully created your own query engine using llama_index.
